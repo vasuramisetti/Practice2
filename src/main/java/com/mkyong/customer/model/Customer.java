@@ -16,6 +16,7 @@ public class Customer
 		this.phNumber=phNumber;
 	}
 	
+	
 	public int getCustId() {
 		return custId;
 	}

@@ -4,8 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
+
 
 import com.mkyong.customer.dao.CustomerDAO;
 import com.mkyong.customer.model.Customer;
@@ -79,7 +82,50 @@ public class JdbcCustomerDAO implements CustomerDAO
 			}
 		}
 	}
+	
+	
+	
+	
+	public List<Customer> getAll() {
+		String query = "select CUST_ID, NAME,AGE,PHONE_NUMBER  from customer";
+		List<Customer> cuList = new ArrayList<Customer>();
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try{
+			con = dataSource.getConnection();
+			ps = con.prepareStatement(query);
+			rs = ps.executeQuery();
+			while(rs.next()){
+				Customer cu = new Customer(0, query, 0, query);
+				cu.setCustId(rs.getInt("CUST_ID"));
+				cu.setName(rs.getString("NAME"));
+				cu.setAge(rs.getInt("AGE"));
+				cu.setPhNumber(rs.getString("PHONE_NUMBER"));
+				cuList.add(cu);
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			try {
+				rs.close();
+				ps.close();
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return cuList;
+	}
+	
+	
+	
+	
+	
+	
 }
+
+
 
 
 
